@@ -351,7 +351,7 @@ sample(x=die, size=1, replace=T)
 ```
 
 ```
-[1] 4
+[1] 1
 ```
 
 Sampling from a population
@@ -662,12 +662,12 @@ head(experiment1)
 
 ```
       factorA     factorB replicate mean response
-1 FacA_Level1 FacA_Level1         A    2 2.469372
-2 FacA_Level2 FacA_Level1         A    3 2.517810
-3 FacA_Level1 FacA_Level2         A    3 2.264110
-4 FacA_Level2 FacA_Level2         A    4 2.168116
-5 FacA_Level1 FacA_Level1         B    2 2.161433
-6 FacA_Level2 FacA_Level1         B    3 3.920972
+1 FacA_Level1 FacA_Level1         A    2 2.590451
+2 FacA_Level2 FacA_Level1         A    3 3.894365
+3 FacA_Level1 FacA_Level2         A    3 1.414964
+4 FacA_Level2 FacA_Level2         A    4 5.534964
+5 FacA_Level1 FacA_Level1         B    2 1.547780
+6 FacA_Level2 FacA_Level1         B    3 2.047618
 ```
 
 Challenge
@@ -723,11 +723,13 @@ summary(fit)
 ```
 
 ```
-                Df Sum Sq Mean Sq F value Pr(>F)
-factorA          1  1.835  1.8355   2.878  0.128
-factorB          1  0.434  0.4338   0.680  0.433
-factorA:factorB  1  0.982  0.9817   1.539  0.250
-Residuals        8  5.102  0.6377               
+                Df Sum Sq Mean Sq F value Pr(>F)  
+factorA          1  6.381   6.381   4.725 0.0615 .
+factorB          1 12.044  12.044   8.918 0.0174 *
+factorA:factorB  1  0.585   0.585   0.433 0.5291  
+Residuals        8 10.804   1.351                 
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
 ```r

@@ -1,0 +1,9 @@
+---
+title: "README"
+author: "Etienne Low-Décarie"
+date: '2018-06-28'
+output: html_document
+---
+
+The presentation can be viewed at:
+https://low-decarie.github.io/Introduction-to-simulation-for-experimental-design-using-R/
