@@ -1,84 +1,3 @@
-Introduction to simulation for experimental design using R
-===
-author: Etienne Low-Décarie
-date: 12 July 2018
-
-
-
-Gettint to know each other
-===
-left: 30%
-
-<div align="center">
-You?
-<div>
-
-***
-
-Workshop
-- Peer teaching and coding
-  - I am one of your peers... correct me when I am wrong! etc.
-- Post its
-- Challenges
-    - Don't look at solutions when given...
-
-Schedule
-===========
-
-- Introduction
-  - Review of what makes a good study/experiment
-  - Experimentaly accounting for variability
-  - Some classical experimental designs
-- **~10:30AM - 30 minute coffee break**
-  - Justification of simulation for experimental design
-- Basic experiment simulation using a spreadsheet
-- Sampling in R
-  - Sampling a population
-  - Sampling from a distribution
-      
-***
-
-  - Repeated sampling and summary
-  - Challenge: summary statistics from sample
-- **~12:30PM - 60 minute lunch break**
-- Experimental design setup in R
-- Simulating an experiment
-  - Scaling of predictors
-  - Replicated simulation
-  - Sensivitivy analysis
-- **~15:30AM - 30 minute break**
-- Dojo and/or work on your experiment
-
-===
-
-> To consult the statistician after an experiment is finished is often merely to ask him to conduct a post mortem examination. He can perhaps say what the experiment died of.
-
-
-Sir Ronald Fisher, Presidential Address to the First Indian Statistical Congress, 1938. Sankhya 4, 14-17.
-
-<img src=https://serverdensity-wpengine.netdna-ssl.com/wp-content/uploads/2016/01/Write-a-postmortem.png width="500" style="float:right">
-
-
-
-A good study/experiment
-====
-
-- Good question / good hypothesis
-  - Falsifiable (testable)
-      - Common issue: absence of evidence is not evidence of absence
-  - Specific
-  - Powerful: generalizable, leading to prediction
-  - Empirical: direct to observation
-  - Plausible
-  
-  *Recognizing that not all studies are aimed at hypothesis testing.*
-  
-  ***
-  
-  ![bear behind a tree](https://i.redditmedia.com/A6yHPL1oOlTzoxo5Q_cibpmLNqZsrjUiqj6JNyfVQ-8.jpg?s=ada560e1ea5dd353e1303df798a361c9)
-  
-
-  
 A good study/experiment
 ====
 
@@ -197,6 +116,7 @@ Challenge with:
 
 Classes (broad categories)
 ===
+
 Dependant\Independant| Continuous | Categorical
 ---|---|---
 Continuous | Regression | ANOVA
@@ -224,7 +144,6 @@ Many are optimal experimental designs if all required experimental units are ava
 A bestiary of classical experimental designs
 ===
 
-[Task view](https://cran.r-project.org/web/views/ExperimentalDesign.html)
 
 Famous failures of experimental design
 ===
@@ -277,7 +196,6 @@ Why simulate?
 
 Why simulate?
 ===
-incremental: true
 
 - Eliminate the need for dice when playing Dungeons and Dragons
 - Dry run of experimental design
@@ -367,7 +285,7 @@ sample(x=die, size=1, replace=T)
 ```
 
 ```
-[1] 1
+[1] 3
 ```
 
 Sampling from a population
@@ -394,7 +312,7 @@ hist(die_results,
                 by=1))
 ```
 ***
-![plot of chunk unnamed-chunk-5](Introduction to simulation for experimental design using R-figure/unnamed-chunk-5-1.png)
+![plot of chunk unnamed-chunk-5](trial-figure/unnamed-chunk-5-1.png)
 
 
 3D die (just because we can)
@@ -486,7 +404,7 @@ sample_norm <- rnorm(n = 10000,
 hist(sample_norm)
 ```
 
-![plot of chunk unnamed-chunk-12](Introduction to simulation for experimental design using R-figure/unnamed-chunk-12-1.png)
+![plot of chunk unnamed-chunk-12](trial-figure/unnamed-chunk-12-1.png)
 
 Bestiary of distributions
 ========================================================
@@ -534,7 +452,7 @@ dolphins <- rpois(n = 1000,
 hist(dolphins)
 ```
 
-![plot of chunk unnamed-chunk-13](Introduction to simulation for experimental design using R-figure/unnamed-chunk-13-1.png)
+![plot of chunk unnamed-chunk-13](trial-figure/unnamed-chunk-13-1.png)
 
 
 Solutions
@@ -549,7 +467,7 @@ species <- rlnorm(n = 1000,
 hist(species)
 ```
 
-![plot of chunk unnamed-chunk-14](Introduction to simulation for experimental design using R-figure/unnamed-chunk-14-1.png)
+![plot of chunk unnamed-chunk-14](trial-figure/unnamed-chunk-14-1.png)
 
 
 Challenge
@@ -629,7 +547,7 @@ one_replicate$response <- with(one_replicate,
 
 ***
 
-![plot of chunk unnamed-chunk-17](Introduction to simulation for experimental design using R-figure/unnamed-chunk-17-1.png)
+![plot of chunk unnamed-chunk-17](trial-figure/unnamed-chunk-17-1.png)
 
 
 How to scale predictors
@@ -662,7 +580,7 @@ one_replicate$response <- with(one_replicate,
 
 ***
 
-![plot of chunk unnamed-chunk-20](Introduction to simulation for experimental design using R-figure/unnamed-chunk-20-1.png)
+![plot of chunk unnamed-chunk-20](trial-figure/unnamed-chunk-20-1.png)
 
 
 Adding error and replication
@@ -723,315 +641,4 @@ p <- qplot(data=experiment1,
 print(p)
 ```
 
-![plot of chunk unnamed-chunk-22](Introduction to simulation for experimental design using R-figure/unnamed-chunk-22-1.png)
-
-Solution
-========================================================
-
-2.
-
-```r
-fit <- aov(data = experiment1,
-           response~factorA*factorB)
-summary(fit)
-```
-
-```
-                Df Sum Sq Mean Sq F value Pr(>F)
-factorA          1   0.00   0.000   0.000  1.000
-factorB          2   0.00   0.000   0.000  1.000
-factorA:factorB  2  12.50   6.250   2.292  0.143
-Residuals       12  32.72   2.726               
-```
-
-```r
-par(mfrow=c(2,2))
-plot(fit)
-```
-
-![plot of chunk unnamed-chunk-23](Introduction to simulation for experimental design using R-figure/unnamed-chunk-23-1.png)
-
-```r
-par(mfrow=c(1,1))
-```
-
-Accelerate the process
-========================================================
-
-Experimental setup using tools
-
-
-```r
-require(AlgDesign)
-experiment2 <- gen.factorial(levels=c(3,2,2),
-                             nVars=3,
-                             varNames=c("A","B","C"),
-                             factors="all")
-```
-[Experimental design task view](https://cran.r-project.org/web/views/ExperimentalDesign.html)
-
-
-Replicate the whole experiments (trials)
-===
-
-- create an expanded simulated data set and analyse each trial
-
-- create the experimental design
-
-```r
-experiment_design <- gen.factorial(levels=c(3,2,2),
-                            nVars=3,
-                            varNames=c("A","B","C"),
-                            factors="all")
-
-experiment_design <- num_scale_fact(experiment_design)
-```
-
-Replicate the whole experiments design
-===
-
-- add replication and trial (replication of the experiment)
-
-```r
-trial_rep <- expand.grid(trial=as.factor(1:1000),
-                         rep=as.factor(1:5))
-
-expand.grid.df <- function(...) Reduce(function(...) merge(..., by=NULL), list(...))
-
-rep_exp1 <- expand.grid.df(trial_rep,experiment_design)
-```
-
-https://stackoverflow.com/questions/11693599/alternative-to-expand-grid-for-data-frames
-
-Add a response
-===
-
-
-```r
-rep_exp1$response <- with(rep_exp1, num_A+num_B+num_B*num_C+num_A*num_B*num_C+rnorm(nrow(rep_exp1), sd=2))
-```
-
-Plotting the replicated experiment
-===
-
-
-```r
-p <- qplot(data=rep_exp1,
-           x=A,
-           y=response,
-           colour = B,
-           alpha=I(0.02),
-           geom="jitter")+
-  geom_line(aes(group=paste(trial, rep, B)),
-             alpha=0.02)+
-  facet_grid(. ~ C, labeller = label_both)
-print(p)
-```
-
-![plot of chunk unnamed-chunk-28](Introduction to simulation for experimental design using R-figure/unnamed-chunk-28-1.png)
-
-Analysing the trials
-===
-
-
-```r
-require(broom)
-require(dplyr)
-fit_results <- rep_exp1 %>%
-  group_by(trial) %>%
-  do(tidy(aov(response~A*B*C, data=.)))
-
-require(ggplot2)
-p <- qplot(data = fit_results,
-           x = p.value,
-           binwidth=0.05)+
-  facet_wrap(~term)
-```
-
-***
-
-![plot of chunk unnamed-chunk-30](Introduction to simulation for experimental design using R-figure/unnamed-chunk-30-1.png)
-
-
-
-
-```r
-require(sjstats)
-fit_results <- rep_exp1 %>%
-  group_by(trial) %>%
-  do(omega_sq(aov(response~A*B*C, data=.)))
-```
-
-***
-
-![plot of chunk unnamed-chunk-32](Introduction to simulation for experimental design using R-figure/unnamed-chunk-32-1.png)
-
-
-
-Replicate the whole experiments (alternatives)
-===
-
-- fit model to single experiment and use `simulate`
-
-    simulate.lm : normal distribution with same MSE as original model
-
-creat a base experiment
-
-```r
-exp_d_rep <- do.call("rbind", replicate(3, experiment_design, simplify = FALSE))
-exp_resp <- exp_d_rep
-exp_resp$response <- with(exp_resp,
-                       num_A+num_B+num_B*num_C+num_A*num_B*num_C+rnorm(nrow(exp_resp), sd=2))
-```
-
-Replicate with `simulate`
-===
-
-
-```r
-fit <- lm(response~A*B*C, data=exp_resp)
-exp_sim <- cbind(exp_d_rep,simulate(fit,nsim = 10))
-
-require(tidyr)
-exp_sim <- gather(exp_sim,contains("sim_"), key = trial ,value = response)
-```
-
-
-Experimenting with experimental design
-===
-
-Sensitivity analysis of design: simulate a series of experimental design scenarios and see how it affects inference from the study.
-
-
-Setup trials that vary in design
-===
-
-Lets get super meta: setup an experimental design for your sensitivity analysis experiment of your experiment
-
-```r
-sens_setup <- expand.grid(trial=as.factor(1:100),
-                         replication=c(3:10),
-                         error=c(0.1,0.5,1,5,10))
-```
-
-Calcualte the response for different design values
-===
-
-Setup a function
-
-```r
-f_rep_error <- function(rep,error){
-  rep_exp <- expand.grid.df(data.frame(rep=rep, replicate=1:rep),experiment_design)
-  rep_exp$response <- with(rep_exp, num_A+num_B+num_B*num_C+num_A*num_B*num_C+rnorm(nrow(rep_exp), sd=error))
-  return(rep_exp)
-}
-```
-Apply the function to individual trials
-
-```r
-trial_rep_error <- sens_setup %>% group_by(trial, replication, error) %>%
-  do(with(.,f_rep_error(replication, error)))
-```
-
-
-Sensitivity analysis of experimental design
-or experimenting with experimental design
-===
-
-
-```r
-require(broom)
-require(dplyr)
-fit_results <- trial_rep_error %>%
-  group_by(trial, rep, error) %>%
-  do(tidy(aov(response~A*B*C, data=.)))
-```
-
-![plot of chunk unnamed-chunk-39](Introduction to simulation for experimental design using R-figure/unnamed-chunk-39-1.png)
-
-
-
-
-Accelerate the process in specific cases
-===
-
-Optimize the design using tools
-
-For certain types of design, the allocation of experimental units can be optimized using established algorithsm.
-
-For example,in some cases, a full factorial design can be reduced to a carefully selected subset of cases with only a marginal effect on estimated parameters.
-
-see ```R vignette("AlgDesign")```
-
-- optBlock {AlgDesign}
-- optFederov {AlgDesign}
-
-Challenge
-========================================================
-
-- instead of `gen.factorial` use one of the optimize incomplete factorial designs using the same setup `rep_exp1`
-  - can you detect the all the same effects?
-  - are the parameter estimates similar?
-- does the use of non-normaly distributed error (eg. poisson) affect your interpreation using `aov`?
-- any difference with numeric rather than factor predictors?
-- what are the effect of a non-linear interaction with one of your predictors?
-
-<div class="centered">
-
-<script src="countdown.js" type="text/javascript"></script>
-<script type="application/javascript">
-var myCountdown2 = new Countdown({
-    							time: 300, 
-									width:150, 
-									height:80, 
-									rangeHi:"minute"	// <- no comma on last item!
-									});
-
-</script>
-
-</div>
-
-Coffee break
-===
-type: alert
-
-30 minutes
-
-![need caffeine](https://media2.giphy.com/media/oZEBLugoTthxS/giphy.gif)
-
-Dojo
-===
-
-Dojo: deliberate practice
-
-- pair/team coding
-
-Alternative: pair/team coding on each other's experiments (turns focusing on each experiment in the team).
-
-Dojo 1
-===
-
-Produce an optimal design for the treatments in the Park Grass experiment
-
-
-
-Dojo 2
-===
-
-Design an experiment to:
-- Detect the effect of biodiversity on ecosystem process
-  - Include a species that has a high contribution to ecosystem function compared to the average of all other species
-  - Include a pair of species that seperatly do not contribute to the process, but together have a strong impact on diversity
-  - How many levels of biodiversity should your experiment contain?
-  - How many replicate communities are needed at each level?
-  - Can blocking help distinguish between composition effects (eg. sampling effect) and diversity effect?
-  
-[Detecting the Effects of Diversity on Measures of Ecosystem Function: Experimental Design, Null Models and Empirical Observations](http://www.jstor.org/stable/3547487?origin=JSTOR-pdf)
-
-Dojo 3
-===
-
-Redesign the experiment from your favourite recent publication
-- Use the same number of experimental units and try to improve on the design
-- Where the authors lucky? Insert problems into the study (eg. other distribution, loss of a replicate).  Do you consistently get the same results.
-
+![plot of chunk unnamed-chunk-22](trial-figure/unnamed-chunk-22-1.png)

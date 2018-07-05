@@ -3,8 +3,11 @@ Introduction to simulation for experimental design using R
 author: Etienne Low-Décarie
 date: 12 July 2018
 
+
+
 Gettint to know each other
 ===
+left: 30%
 
 <div align="center">
 You?
@@ -39,8 +42,8 @@ Schedule
   - Challenge: summary statistics from sample
 - **~12:30PM - 60 minute lunch break**
 - Experimental design setup in R
-  - Challenge: Setting up an experimental design using R tools
 - Simulating an experiment
+  - Scaling of predictors
   - Replicated simulation
   - Sensivitivy analysis
 - **~15:30AM - 30 minute break**
@@ -48,9 +51,10 @@ Schedule
 
 ===
 
-To consult the statistician after an experiment is finished is often merely to ask him to conduct a post mortem examination. He can perhaps say what the experiment died of.
+> To consult the statistician after an experiment is finished is often merely to ask him to conduct a post mortem examination. He can perhaps say what the experiment died of.
 
-`Sir Ronald Fisher, Presidential Address to the First Indian Statistical Congress, 1938. Sankhya 4, 14-17.`
+
+Sir Ronald Fisher, Presidential Address to the First Indian Statistical Congress, 1938. Sankhya 4, 14-17.
 
 <img src=https://serverdensity-wpengine.netdna-ssl.com/wp-content/uploads/2016/01/Write-a-postmortem.png width="500" style="float:right">
 
@@ -93,16 +97,18 @@ A good study/experiment
 Issues with experimental design: gene expression studies in human populations
 ===
 
-'quantitative phenotype differs significantly between European-derived and Asian-derived populations'
+> quantitative phenotype differs significantly between European-derived and Asian-derived populations
 
 [Common genetic variants account for differences in gene expression among ethnic groups](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3005333/pdf/nihms245973.pdf)
 
 Issues with experimental design: gene expression studies in human populations
 ===
 
-'Interestingly, the arrays used to measure expression for the CEU [European-derived] individuals were primarily processed from 2003 to 2004,whereas the arrays used to measure expression for the ASN [Asian-derived] individuals were all processed in 2005–2006.'
+> Interestingly, the arrays used to measure expression for the CEU [European-derived] individuals were primarily processed from 2003 to 2004,whereas the arrays used to measure expression for the ASN [Asian-derived] individuals were all processed in 2005–2006.
 
-“microarray batch effects appear to be completely confounded with population effects.”
+.
+
+> microarray batch effects appear to be completely confounded with population effects.”
 
 [On the design and analysis of gene expression studies in human populations](https://www.nature.com/articles/ng0707-807)
 
@@ -214,6 +220,12 @@ Many are optimal experimental designs if all required experimental units are ava
 
 ![bestiary](https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/AberdeenBestiaryFolio005rAdamNamesAnimalsDetail.jpg/200px-AberdeenBestiaryFolio005rAdamNamesAnimalsDetail.jpg)
 
+
+A bestiary of classical experimental designs
+===
+
+[Task view](https://cran.r-project.org/web/views/ExperimentalDesign.html)
+
 Famous failures of experimental design
 ===
 
@@ -243,6 +255,7 @@ Redisgn park grass experiment:
 
 Coffee break
 ===
+type: alert
 
 30 minutes
 
@@ -264,11 +277,13 @@ Why simulate?
 
 Why simulate?
 ===
+incremental: true
 
 - Eliminate the need for dice when playing Dungeons and Dragons
 - Dry run of experimental design
   - Good allocation of experimental effort
   - vs optimal (ie algorithmic) allocation of experimental effort?
+  - vs power analysis (see vignette of `pwr`
 - Test/understand a statistical approach
 - Explore theory/hypotheses
 - Bad reason: Fake data...
@@ -291,7 +306,7 @@ Challenge
 
 Create a spreadsheet simulation of an experiment testing :
 
-- testing the effect of nitrogen, phosphorus and [CO2] in mesocosms
+- testing the effect of nitrogen, phosphorus and [CO2] on chlorophyll in mesocosms
 
 and/or
 
@@ -325,12 +340,13 @@ Issues with experiment simulation using a spreadsheet
 Issues with experiment simulation using a spreadsheet
 ===
 
+- limited types of distributions
 - tedious setup
     - design (repetitive copy pasting)
     - multiple trials (very long sheet)
     - etc.
+- **challenge of scaling**
 - requires switching to R for downstream steps
-- limited types of distributions
 - ...
 
 
@@ -522,7 +538,7 @@ Challenge
 ===
 
 - Import one of your spreadsheet simulation into R
-- Creat a plot of the data simulated in Excel
+- Create a plot in R of the data simulated in Excel
 - In `R`, create a new column containing simulated values using a more sensible distribution of error
 
 <div class="centered">
@@ -542,6 +558,7 @@ var myCountdown2 = new Countdown({
 
 Lunch break
 ===
+type: alert
 
 60 minutes
 
@@ -557,65 +574,105 @@ Example 2 factors, 2 levels, 3 replicates, full factorial
 ```{r}
 one_replicate <- data.frame(factorA=factor(rep(c("FacA_Level1",
                                      "FacA_Level2"),
-                                     2)),
-                            factorB=factor(rep(c("FacA_Level1",
-                                     "FacA_Level2"),
+                                     3)),
+                            factorB=factor(rep(c("FacB_Level1",
+                                     "FacB_Level2", "FacB_Level3"),
                                      each=2)))
 head(one_replicate)                              
 ```
 
+Alternatives:
+
+- if conducting full factorial, use `expand.grid()`
+- create design in spreadsheet and import
 
 
-Simulating an experiment
+Need for scaling of predictors
 ========================================================
 
-Replication
+```{r}
+require(cowplot)
+one_replicate$response <- with(one_replicate,
+                        as.numeric(factorA)*
+                          as.numeric(factorB))
+```
+
+***
+
+```{r echo=FALSE}
+p <- qplot(data = one_replicate,
+           x=factorA,
+           y=response,
+           colour=factorB)+
+  geom_line(aes(group=factorB))
+
+print(p)
+```
+
+
+How to scale predictors
+========================================================
+
+function to create scaled numeric predictors from all factors
+```{r}
+num_scale_fact <- function(data_frame){
+  ind <- sapply(data_frame, is.factor)
+  data_frame[paste0("num_",names(data_frame[ind]))] <- 
+    lapply(data_frame[ind],
+                                                              function(x)scale(as.numeric(x)))
+  return(data_frame)
+}
+```
+
+
+Results of scaling predictors
+========================================================
+
+```{r}
+one_replicate <- num_scale_fact(one_replicate)
+
+one_replicate$response <- with(one_replicate,
+                        num_factorA*
+                          num_factorB)
+```
+
+***
+
+```{r echo=FALSE}
+p <- qplot(data = one_replicate,
+           x=factorA,
+           y=response,
+           colour=factorB)+
+  geom_line(aes(group=factorB))
+
+print(p)
+```
+
+
+Adding error and replication
+========================================================
 
 ```{r}
 experiment1 <- NULL
 for(i in LETTERS[1:3]){
   one_replicate$replicate <- factor(i)
+  one_replicate$response <- with(one_replicate,
+                        num_factorA*
+                          num_factorB+rnorm(n = 1, sd=2))
   experiment1 <- rbind(experiment1,one_replicate)
 }
-head(experiment1)
 ```
 
+Avoid for loops in this context using the apltly named
+`replicate`
 
-Experimental design R tools
-===
-
-<iframe src="https://cran.r-project.org/web/views/ExperimentalDesign.html"></iframe>
-
-
-Simulating an experiment
-========================================================
-
-Assume factors a and b have equal effect size and
-have an additive effect (no interactions)
-```{r}
-experiment1$mean <- with(experiment1,
-                        as.numeric(factorA)+
-                          as.numeric(factorB))
-head(experiment1)
-```
-
-
-Simulating an experiment
-========================================================
-
-```{r}
-experiment1$response <- rnorm(n=length(experiment1$mean),
-                             mean=experiment1$mean,
-                             sd=1)
-head(experiment1)
-```
 
 Challenge
 ========================================================
 
 1. Plot experiment 1
 2. Analyze experiment 1
-- You know that both factorA and factorB have an additive effect, can you detect this form this experiment?
+- You know that factorA and factorB have an an interactive effect, can you detect this from this experiment?
 - If you can detect an effect, what could you do to save money/time etc in this experiment?
 - If you can not detect an effect, what would you need to do to detect the known effect?
 
@@ -656,7 +713,9 @@ Solution
 fit <- aov(data = experiment1,
            response~factorA*factorB)
 summary(fit)
+par(mfrow=c(2,2))
 plot(fit)
+par(mfrow=c(1,1))
 ```
 
 Accelerate the process
@@ -674,10 +733,193 @@ experiment2 <- gen.factorial(levels=c(3,2,2),
 ```
 [Experimental design task view](https://cran.r-project.org/web/views/ExperimentalDesign.html)
 
-Sensitivity analysis
+
+Replicate the whole experiments (trials)
 ===
 
-Accelerate the process
+- create an expanded simulated data set and analyse each trial
+
+- create the experimental design
+```{r}
+experiment_design <- gen.factorial(levels=c(3,2,2),
+                            nVars=3,
+                            varNames=c("A","B","C"),
+                            factors="all")
+
+experiment_design <- num_scale_fact(experiment_design)
+```
+
+Replicate the whole experiments design
+===
+
+- add replication and trial (replication of the experiment)
+```{r}
+trial_rep <- expand.grid(trial=as.factor(1:1000),
+                         rep=as.factor(1:5))
+
+expand.grid.df <- function(...) Reduce(function(...) merge(..., by=NULL), list(...))
+
+rep_exp1 <- expand.grid.df(trial_rep,experiment_design)
+```
+
+https://stackoverflow.com/questions/11693599/alternative-to-expand-grid-for-data-frames
+
+Add a response
+===
+
+```{r}
+rep_exp1$response <- with(rep_exp1, num_A+num_B+num_B*num_C+num_A*num_B*num_C+rnorm(nrow(rep_exp1), sd=2))
+```
+
+Plotting the replicated experiment
+===
+
+```{r}
+p <- qplot(data=rep_exp1,
+           x=A,
+           y=response,
+           colour = B,
+           alpha=I(0.02),
+           geom="jitter")+
+  geom_line(aes(group=paste(trial, rep, B)),
+             alpha=0.02)+
+  facet_grid(. ~ C, labeller = label_both)
+print(p)
+```
+
+Analysing the trials
+===
+
+```{r}
+require(broom)
+require(dplyr)
+fit_results <- rep_exp1 %>%
+  group_by(trial) %>%
+  do(tidy(aov(response~A*B*C, data=.)))
+
+require(ggplot2)
+p <- qplot(data = fit_results,
+           x = p.value,
+           binwidth=0.05)+
+  facet_wrap(~term)
+```
+
+***
+
+```{r echo=F}
+print(p)
+```
+
+
+
+```{r}
+require(sjstats)
+fit_results <- rep_exp1 %>%
+  group_by(trial) %>%
+  do(omega_sq(aov(response~A*B*C, data=.)))
+```
+
+***
+
+```{r echo=FALSE}
+require(ggplot2)
+p <- qplot(data = fit_results,
+           y = omegasq,
+           x = term,
+           geom= "violin")
+print(p)
+```
+
+
+
+Replicate the whole experiments (alternatives)
+===
+
+- fit model to single experiment and use `simulate`
+
+    simulate.lm : normal distribution with same MSE as original model
+
+creat a base experiment
+```{r}
+exp_d_rep <- do.call("rbind", replicate(3, experiment_design, simplify = FALSE))
+exp_resp <- exp_d_rep
+exp_resp$response <- with(exp_resp,
+                       num_A+num_B+num_B*num_C+num_A*num_B*num_C+rnorm(nrow(exp_resp), sd=2))
+```
+
+Replicate with `simulate`
+===
+
+```{r}
+fit <- lm(response~A*B*C, data=exp_resp)
+exp_sim <- cbind(exp_d_rep,simulate(fit,nsim = 10))
+
+require(tidyr)
+exp_sim <- gather(exp_sim,contains("sim_"), key = trial ,value = response)
+```
+
+
+Experimenting with experimental design
+===
+
+Sensitivity analysis of design: simulate a series of experimental design scenarios and see how it affects inference from the study.
+
+
+Setup trials that vary in design
+===
+
+Lets get super meta: setup an experimental design for your sensitivity analysis experiment of your experiment
+```{r}
+sens_setup <- expand.grid(trial=as.factor(1:100),
+                         replication=c(3:10),
+                         error=c(0.1,0.5,1,5,10))
+```
+
+Calcualte the response for different design values
+===
+
+Setup a function
+```{r}
+f_rep_error <- function(rep,error){
+  rep_exp <- expand.grid.df(data.frame(rep=rep, replicate=1:rep),experiment_design)
+  rep_exp$response <- with(rep_exp, num_A+num_B+num_B*num_C+num_A*num_B*num_C+rnorm(nrow(rep_exp), sd=error))
+  return(rep_exp)
+}
+```
+Apply the function to individual trials
+```{r}
+trial_rep_error <- sens_setup %>% group_by(trial, replication, error) %>%
+  do(with(.,f_rep_error(replication, error)))
+```
+
+
+Sensitivity analysis of experimental design
+or experimenting with experimental design
+===
+
+```{r}
+require(broom)
+require(dplyr)
+fit_results <- trial_rep_error %>%
+  group_by(trial, rep, error) %>%
+  do(tidy(aov(response~A*B*C, data=.)))
+```
+
+```{r echo= FALSE}
+require(ggplot2)
+p <- qplot(data = fit_results,
+           x=as.factor(error),
+           y = p.value,
+           color=as.factor(rep),
+           geom="boxplot")+
+  facet_wrap(~term)
+print(p)
+```
+
+
+
+
+Accelerate the process in specific cases
 ===
 
 Optimize the design using tools
@@ -694,9 +936,12 @@ see ```R vignette("AlgDesign")```
 Challenge
 ========================================================
 
-1. Create a data set simulating the effect of waste water runoff and intensive scuba diving for biodiversity (hint: species counts) of coral reefs
-2. Plot the results
-3. Analyze the results (hint: counts are not normaly distributed)
+- instead of `gen.factorial` use one of the optimize incomplete factorial designs using the same setup `rep_exp1`
+  - can you detect the all the same effects?
+  - are the parameter estimates similar?
+- does the use of non-normaly distributed error (eg. poisson) affect your interpreation using `aov`?
+- any difference with numeric rather than factor predictors?
+- what are the effect of a non-linear interaction with one of your predictors?
 
 <div class="centered">
 
@@ -715,6 +960,7 @@ var myCountdown2 = new Countdown({
 
 Coffee break
 ===
+type: alert
 
 30 minutes
 
@@ -751,3 +997,8 @@ Design an experiment to:
 
 Dojo 3
 ===
+
+Redesign the experiment from your favourite recent publication
+- Use the same number of experimental units and try to improve on the design
+- Where the authors lucky? Insert problems into the study (eg. other distribution, loss of a replicate).  Do you consistently get the same results.
+
