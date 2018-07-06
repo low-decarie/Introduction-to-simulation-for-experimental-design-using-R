@@ -2,12 +2,15 @@ Introduction to simulation for experimental design using R
 ===
 author: Etienne Low-Décarie
 date: 12 July 2018
-
-
+width: 1280
+height: 800
 
 Gettint to know each other
 ===
 left: 30%
+
+
+
 
 <div align="center">
 You?
@@ -25,6 +28,7 @@ Workshop
 Schedule
 ===========
 
+<small>
 - Introduction
   - Review of what makes a good study/experiment
   - Experimentaly accounting for variability
@@ -35,11 +39,12 @@ Schedule
 - Sampling in R
   - Sampling a population
   - Sampling from a distribution
-      
+</small>
+
 ***
 
+<small>
   - Repeated sampling and summary
-  - Challenge: summary statistics from sample
 - **~12:30PM - 60 minute lunch break**
 - Experimental design setup in R
 - Simulating an experiment
@@ -49,7 +54,11 @@ Schedule
 - **~15:30AM - 30 minute break**
 - Dojo and/or work on your experiment
 
+</small>
+
+
 ===
+  
 
 > To consult the statistician after an experiment is finished is often merely to ask him to conduct a post mortem examination. He can perhaps say what the experiment died of.
 
@@ -103,6 +112,7 @@ Issues with experimental design: gene expression studies in human populations
 
 Issues with experimental design: gene expression studies in human populations
 ===
+
 
 > Interestingly, the arrays used to measure expression for the CEU [European-derived] individuals were primarily processed from 2003 to 2004,whereas the arrays used to measure expression for the ASN [Asian-derived] individuals were all processed in 2005–2006.
 
@@ -197,6 +207,8 @@ Challenge with:
 
 Classes (broad categories)
 ===
+
+
 Dependant\Independant| Continuous | Categorical
 ---|---|---
 Continuous | Regression | ANOVA
@@ -229,7 +241,11 @@ A bestiary of classical experimental designs
 Famous failures of experimental design
 ===
 
-Park grass experiment: Started by Lawes and Gilbert in 1856 (162 years old, pre-dates Fisher's work on experimental design at Rothemsted, location of experiment), its original purpose was to investigate ways of improving the yield of hay by the application of inorganic fertilizers and organic manure.
+Park grass experiment: 
+-started by Lawes and Gilbert in 1856 at Rothemsted
+-162 years old
+  - pre-dates Fisher's work on experimental design at Rothemsted
+  - its original purpose was to investigate ways of improving the yield of hay by the application of inorganic fertilizers and organic manure.
 
 ![park grass picture](park_grass_pict.jpeg)
 
@@ -246,12 +262,14 @@ Challenge: Park grass
 Park grass :
 - What questions can you ask with the park grass experiment as it was designed?
 
-Redisgn park grass experiment:
+Redesign park grass experiment:
 
 1. Given the experimental units provided (22 rows x 4 columns + 11 cells= 99) which of the park grass experiment questions  (effect of N, P, Na, etc.) would you address and how?
 2. Given the questions park grass experiment, come up with a minimal design that addresses the historic set of questions/hypothesis
 
 * Maybe start by listing the treatments and or associated questions.  This could be done by specifying the complete model in R style formula syntax.
+
+** WHat other famous failures of experimental design do you know? **
 
 Coffee break
 ===
@@ -265,9 +283,11 @@ type: alert
 Park grass
 ===
 
-Analysis despite flaws in experimental design: [Determinants of Species Richness in the Park Grass Experiment](http://oro.open.ac.uk/2295/1/Crawley_etal_2005.pdf)
+Analysis despite flaws in experimental design:  
+[Determinants of Species Richness in the Park Grass Experiment](http://oro.open.ac.uk/2295/1/Crawley_etal_2005.pdf)
 
-Park grass inspired experiment using proper experimental design:  [Effects of grassland management on plant C:N:P stoichiometry:implications for soil element cycling and storage](https://esajournals.onlinelibrary.wiley.com/doi/epdf/10.1002/ecs2.1963) (example publication, dozens of related publications)
+Park grass inspired experiment using proper experimental design:  
+[Effects of grassland management on plant C:N:P stoichiometry:implications for soil element cycling and storage](https://esajournals.onlinelibrary.wiley.com/doi/epdf/10.1002/ecs2.1963) (example publication, dozens of related publications)
 
 
 Why simulate?
@@ -278,6 +298,10 @@ Why simulate?
 Why simulate?
 ===
 incremental: true
+
+![Dungeons and Dragons dice](danddice.jpeg)
+
+***
 
 - Eliminate the need for dice when playing Dungeons and Dragons
 - Dry run of experimental design
@@ -290,8 +314,7 @@ incremental: true
 
 [examples](http://serc.carleton.edu/sp/library/datasim//examples.html)
 
-***
-![Dungeons and Dragons dice](danddice.jpeg)
+
 
 Basic experiment simulation using a spreadsheet
 ===
@@ -367,7 +390,7 @@ sample(x=die, size=1, replace=T)
 ```
 
 ```
-[1] 1
+[1] 4
 ```
 
 Sampling from a population
@@ -394,7 +417,7 @@ hist(die_results,
                 by=1))
 ```
 ***
-![plot of chunk unnamed-chunk-5](Introduction to simulation for experimental design using R-figure/unnamed-chunk-5-1.png)
+<img src="Introduction to simulation for experimental design using R-figure/unnamed-chunk-5-1.png" title="plot of chunk unnamed-chunk-5" alt="plot of chunk unnamed-chunk-5" style="display: block; margin: auto;" />
 
 
 3D die (just because we can)
@@ -483,10 +506,14 @@ Normal distribution
 sample_norm <- rnorm(n = 10000,
                      mean = 10,
                      sd = 1)
+```
+***
+
+```r
 hist(sample_norm)
 ```
 
-![plot of chunk unnamed-chunk-12](Introduction to simulation for experimental design using R-figure/unnamed-chunk-12-1.png)
+<img src="Introduction to simulation for experimental design using R-figure/unnamed-chunk-13-1.png" title="plot of chunk unnamed-chunk-13" alt="plot of chunk unnamed-chunk-13" style="display: block; margin: auto;" />
 
 Bestiary of distributions
 ========================================================
@@ -505,6 +532,11 @@ Challenges
 
 1. Create a sample representing the number of dolphins seen per 10 hours of observation, for 100 observations (hint: assuming this is a number of independent events occurring in a fixed time)
 2. Create a sample representing the frequency of species in a quadrat (hint: assuming a few species will be very common and many species will be very rare)
+
+Additional challenges:
+- Plot these distributions.
+- Repeat your sampling while the distribution while varying key parameters
+- Plot summary statistics of your sampling with with various parameters
 
 <div class="centered">
 
@@ -531,10 +563,16 @@ Solutions
 ```r
 dolphins <- rpois(n = 1000,
                   lambda = 3)
+```
+
+***
+
+
+```r
 hist(dolphins)
 ```
 
-![plot of chunk unnamed-chunk-13](Introduction to simulation for experimental design using R-figure/unnamed-chunk-13-1.png)
+<img src="Introduction to simulation for experimental design using R-figure/unnamed-chunk-15-1.png" title="plot of chunk unnamed-chunk-15" alt="plot of chunk unnamed-chunk-15" style="display: block; margin: auto;" />
 
 
 Solutions
@@ -549,7 +587,7 @@ species <- rlnorm(n = 1000,
 hist(species)
 ```
 
-![plot of chunk unnamed-chunk-14](Introduction to simulation for experimental design using R-figure/unnamed-chunk-14-1.png)
+<img src="Introduction to simulation for experimental design using R-figure/unnamed-chunk-16-1.png" title="plot of chunk unnamed-chunk-16" alt="plot of chunk unnamed-chunk-16" style="display: block; margin: auto;" />
 
 
 Challenge
@@ -629,7 +667,7 @@ one_replicate$response <- with(one_replicate,
 
 ***
 
-![plot of chunk unnamed-chunk-17](Introduction to simulation for experimental design using R-figure/unnamed-chunk-17-1.png)
+<img src="Introduction to simulation for experimental design using R-figure/unnamed-chunk-19-1.png" title="plot of chunk unnamed-chunk-19" alt="plot of chunk unnamed-chunk-19" style="display: block; margin: auto;" />
 
 
 How to scale predictors
@@ -662,7 +700,7 @@ one_replicate$response <- with(one_replicate,
 
 ***
 
-![plot of chunk unnamed-chunk-20](Introduction to simulation for experimental design using R-figure/unnamed-chunk-20-1.png)
+<img src="Introduction to simulation for experimental design using R-figure/unnamed-chunk-22-1.png" title="plot of chunk unnamed-chunk-22" alt="plot of chunk unnamed-chunk-22" style="display: block; margin: auto;" />
 
 
 Adding error and replication
@@ -723,7 +761,7 @@ p <- qplot(data=experiment1,
 print(p)
 ```
 
-![plot of chunk unnamed-chunk-22](Introduction to simulation for experimental design using R-figure/unnamed-chunk-22-1.png)
+<img src="Introduction to simulation for experimental design using R-figure/unnamed-chunk-24-1.png" title="plot of chunk unnamed-chunk-24" alt="plot of chunk unnamed-chunk-24" style="display: block; margin: auto;" />
 
 Solution
 ========================================================
@@ -737,23 +775,18 @@ summary(fit)
 ```
 
 ```
-                Df Sum Sq Mean Sq F value Pr(>F)
-factorA          1   0.00   0.000   0.000  1.000
-factorB          2   0.00   0.000   0.000  1.000
-factorA:factorB  2  12.50   6.250   2.292  0.143
-Residuals       12  32.72   2.726               
+                Df Sum Sq Mean Sq F value   Pr(>F)    
+factorA          1  0.000    0.00    0.00        1    
+factorB          2  0.000    0.00    0.00        1    
+factorA:factorB  2 12.500    6.25   24.98 5.28e-05 ***
+Residuals       12  3.002    0.25                     
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
-```r
-par(mfrow=c(2,2))
-plot(fit)
-```
+***
 
-![plot of chunk unnamed-chunk-23](Introduction to simulation for experimental design using R-figure/unnamed-chunk-23-1.png)
-
-```r
-par(mfrow=c(1,1))
-```
+<img src="Introduction to simulation for experimental design using R-figure/unnamed-chunk-26-1.png" title="plot of chunk unnamed-chunk-26" alt="plot of chunk unnamed-chunk-26" style="display: block; margin: auto;" />
 
 Accelerate the process
 ========================================================
@@ -768,6 +801,7 @@ experiment2 <- gen.factorial(levels=c(3,2,2),
                              varNames=c("A","B","C"),
                              factors="all")
 ```
+
 [Experimental design task view](https://cran.r-project.org/web/views/ExperimentalDesign.html)
 
 
@@ -825,10 +859,16 @@ p <- qplot(data=rep_exp1,
   geom_line(aes(group=paste(trial, rep, B)),
              alpha=0.02)+
   facet_grid(. ~ C, labeller = label_both)
+```
+
+***
+
+
+```r
 print(p)
 ```
 
-![plot of chunk unnamed-chunk-28](Introduction to simulation for experimental design using R-figure/unnamed-chunk-28-1.png)
+<img src="Introduction to simulation for experimental design using R-figure/unnamed-chunk-32-1.png" title="plot of chunk unnamed-chunk-32" alt="plot of chunk unnamed-chunk-32" style="display: block; margin: auto;" />
 
 Analysing the trials
 ===
@@ -850,9 +890,11 @@ p <- qplot(data = fit_results,
 
 ***
 
-![plot of chunk unnamed-chunk-30](Introduction to simulation for experimental design using R-figure/unnamed-chunk-30-1.png)
+<img src="Introduction to simulation for experimental design using R-figure/unnamed-chunk-34-1.png" title="plot of chunk unnamed-chunk-34" alt="plot of chunk unnamed-chunk-34" style="display: block; margin: auto;" />
 
 
+Analysing the trials
+===
 
 
 ```r
@@ -864,11 +906,11 @@ fit_results <- rep_exp1 %>%
 
 ***
 
-![plot of chunk unnamed-chunk-32](Introduction to simulation for experimental design using R-figure/unnamed-chunk-32-1.png)
+<img src="Introduction to simulation for experimental design using R-figure/unnamed-chunk-36-1.png" title="plot of chunk unnamed-chunk-36" alt="plot of chunk unnamed-chunk-36" style="display: block; margin: auto;" />
 
 
 
-Replicate the whole experiments (alternatives)
+Alternative methods to replicate the whole experiments
 ===
 
 - fit model to single experiment and use `simulate`
@@ -935,8 +977,9 @@ trial_rep_error <- sens_setup %>% group_by(trial, replication, error) %>%
 
 
 Sensitivity analysis of experimental design
-or experimenting with experimental design
 ===
+
+## or experimenting with experimental design
 
 
 ```r
@@ -947,7 +990,9 @@ fit_results <- trial_rep_error %>%
   do(tidy(aov(response~A*B*C, data=.)))
 ```
 
-![plot of chunk unnamed-chunk-39](Introduction to simulation for experimental design using R-figure/unnamed-chunk-39-1.png)
+***
+
+<img src="Introduction to simulation for experimental design using R-figure/unnamed-chunk-43-1.png" title="plot of chunk unnamed-chunk-43" alt="plot of chunk unnamed-chunk-43" style="display: block; margin: auto;" />
 
 
 
@@ -966,7 +1011,7 @@ see ```R vignette("AlgDesign")```
 - optBlock {AlgDesign}
 - optFederov {AlgDesign}
 
-Challenge
+Challenges
 ========================================================
 
 - instead of `gen.factorial` use one of the optimize incomplete factorial designs using the same setup `rep_exp1`
@@ -975,6 +1020,7 @@ Challenge
 - does the use of non-normaly distributed error (eg. poisson) affect your interpreation using `aov`?
 - any difference with numeric rather than factor predictors?
 - what are the effect of a non-linear interaction with one of your predictors?
+- what are the effect of heteroscedasticity (eg. correlation of variance with one of the predictors)?
 
 <div class="centered">
 
@@ -1033,5 +1079,9 @@ Dojo 3
 
 Redesign the experiment from your favourite recent publication
 - Use the same number of experimental units and try to improve on the design
-- Where the authors lucky? Insert problems into the study (eg. other distribution, loss of a replicate).  Do you consistently get the same results.
+- Were the authors lucky? Insert problems into the study (eg. other distribution, loss of a replicate).  Do you consistently get the same results.
 
+
+
+Additional material
+===

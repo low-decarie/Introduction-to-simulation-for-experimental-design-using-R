@@ -1,0 +1,10 @@
+base
+knitr
+ggplot2
+cowplot
+AlgDesign
+broom
+dplyr
+bindrcpp
+sjstats
+tidyr

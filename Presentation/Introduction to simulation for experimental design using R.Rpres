@@ -2,12 +2,18 @@ Introduction to simulation for experimental design using R
 ===
 author: Etienne Low-Décarie
 date: 12 July 2018
-
-
+width: 1280
+height: 800
 
 Gettint to know each other
 ===
 left: 30%
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(cache=TRUE,
+                      fig.align="center")
+```
+
 
 <div align="center">
 You?
@@ -25,6 +31,7 @@ Workshop
 Schedule
 ===========
 
+<small>
 - Introduction
   - Review of what makes a good study/experiment
   - Experimentaly accounting for variability
@@ -35,11 +42,12 @@ Schedule
 - Sampling in R
   - Sampling a population
   - Sampling from a distribution
-      
+</small>
+
 ***
 
+<small>
   - Repeated sampling and summary
-  - Challenge: summary statistics from sample
 - **~12:30PM - 60 minute lunch break**
 - Experimental design setup in R
 - Simulating an experiment
@@ -49,7 +57,11 @@ Schedule
 - **~15:30AM - 30 minute break**
 - Dojo and/or work on your experiment
 
+</small>
+
+
 ===
+  
 
 > To consult the statistician after an experiment is finished is often merely to ask him to conduct a post mortem examination. He can perhaps say what the experiment died of.
 
@@ -103,6 +115,7 @@ Issues with experimental design: gene expression studies in human populations
 
 Issues with experimental design: gene expression studies in human populations
 ===
+
 
 > Interestingly, the arrays used to measure expression for the CEU [European-derived] individuals were primarily processed from 2003 to 2004,whereas the arrays used to measure expression for the ASN [Asian-derived] individuals were all processed in 2005–2006.
 
@@ -197,6 +210,8 @@ Challenge with:
 
 Classes (broad categories)
 ===
+
+
 Dependant\Independant| Continuous | Categorical
 ---|---|---
 Continuous | Regression | ANOVA
@@ -229,7 +244,11 @@ A bestiary of classical experimental designs
 Famous failures of experimental design
 ===
 
-Park grass experiment: Started by Lawes and Gilbert in 1856 (162 years old, pre-dates Fisher's work on experimental design at Rothemsted, location of experiment), its original purpose was to investigate ways of improving the yield of hay by the application of inorganic fertilizers and organic manure.
+Park grass experiment: 
+-started by Lawes and Gilbert in 1856 at Rothemsted
+-162 years old
+  - pre-dates Fisher's work on experimental design at Rothemsted
+  - its original purpose was to investigate ways of improving the yield of hay by the application of inorganic fertilizers and organic manure.
 
 ![park grass picture](park_grass_pict.jpeg)
 
@@ -246,12 +265,14 @@ Challenge: Park grass
 Park grass :
 - What questions can you ask with the park grass experiment as it was designed?
 
-Redisgn park grass experiment:
+Redesign park grass experiment:
 
 1. Given the experimental units provided (22 rows x 4 columns + 11 cells= `r 22*4+11`) which of the park grass experiment questions  (effect of N, P, Na, etc.) would you address and how?
 2. Given the questions park grass experiment, come up with a minimal design that addresses the historic set of questions/hypothesis
 
 * Maybe start by listing the treatments and or associated questions.  This could be done by specifying the complete model in R style formula syntax.
+
+** WHat other famous failures of experimental design do you know? **
 
 Coffee break
 ===
@@ -265,9 +286,11 @@ type: alert
 Park grass
 ===
 
-Analysis despite flaws in experimental design: [Determinants of Species Richness in the Park Grass Experiment](http://oro.open.ac.uk/2295/1/Crawley_etal_2005.pdf)
+Analysis despite flaws in experimental design:  
+[Determinants of Species Richness in the Park Grass Experiment](http://oro.open.ac.uk/2295/1/Crawley_etal_2005.pdf)
 
-Park grass inspired experiment using proper experimental design:  [Effects of grassland management on plant C:N:P stoichiometry:implications for soil element cycling and storage](https://esajournals.onlinelibrary.wiley.com/doi/epdf/10.1002/ecs2.1963) (example publication, dozens of related publications)
+Park grass inspired experiment using proper experimental design:  
+[Effects of grassland management on plant C:N:P stoichiometry:implications for soil element cycling and storage](https://esajournals.onlinelibrary.wiley.com/doi/epdf/10.1002/ecs2.1963) (example publication, dozens of related publications)
 
 
 Why simulate?
@@ -278,6 +301,10 @@ Why simulate?
 Why simulate?
 ===
 incremental: true
+
+![Dungeons and Dragons dice](danddice.jpeg)
+
+***
 
 - Eliminate the need for dice when playing Dungeons and Dragons
 - Dry run of experimental design
@@ -290,8 +317,7 @@ incremental: true
 
 [examples](http://serc.carleton.edu/sp/library/datasim//examples.html)
 
-***
-![Dungeons and Dragons dice](danddice.jpeg)
+
 
 Basic experiment simulation using a spreadsheet
 ===
@@ -356,11 +382,11 @@ Sampling from a defined population in R
 Throwing a six face die
 
 Create the die
-```{r}
+```{r }
 die <-seq(from=1, to=6, by=1)
 ```
 Throw the die
-```{r}
+```{r }
 sample(x=die, size=1, replace=T)
 ```
 
@@ -368,7 +394,7 @@ Sampling from a population
 ========================================================
 
 Throw the 1000 times and keep the results
-```{r}
+```{r }
 die_results <- sample(x=die,
                       size=1000,
                       replace=T)
@@ -379,14 +405,14 @@ Sampling from a population
 ========================================================
 
 Plot the results
-```{r, eval=F}
+```{r , eval=F}
 hist(die_results,
      breaks=seq(from=0.5,
                 to=6.5,
                 by=1))
 ```
 ***
-```{r,echo=F}
+```{r ,echo=F}
 hist(die_results,
      breaks=seq(from=0.5,
                 to=6.5,
@@ -396,7 +422,7 @@ hist(die_results,
 
 3D die (just because we can)
 ========================================================
-```{r, eval=F}
+```{r , eval=F}
 #load TeachingDemos
 require(TeachingDemos)
 #create the die
@@ -406,7 +432,7 @@ roll.rgl.die(steps=10)
 ```
 ***
 `TeachingDemos` also contains a `dice` that throws `ndice`, `rolls` times
-```{r, eval=F}
+```{r , eval=F}
 dice(rolls=3,
      ndice=4,
      sides=6,
@@ -439,15 +465,15 @@ var myCountdown2 = new Countdown({
 
 Solutions
 ========================================================
-```{r}
+```{r }
 die10 <-seq(from=1, to=10, by=1)
 ```
 
-```{r}
+```{r }
 coin <- c("head", "tails")
 ```
 
-```{r}
+```{r }
 p_dice<-c(1,1,1,1,1,5)
 die_results <- sample(x=die,
                       size=1000,
@@ -459,7 +485,7 @@ Sampling from a distribution
 ========================================================
 
 Normal distribution
-```{r,eval=F}
+```{r ,eval=F}
 rnorm(n = number of observations,
       mean = vector of means,
       sd = vector of means)
@@ -473,6 +499,9 @@ Normal distribution
 sample_norm <- rnorm(n = 10000,
                      mean = 10,
                      sd = 1)
+```
+***
+```{r fig.align="center"}
 hist(sample_norm)
 ```
 
@@ -493,6 +522,11 @@ Challenges
 
 1. Create a sample representing the number of dolphins seen per 10 hours of observation, for 100 observations (hint: assuming this is a number of independent events occurring in a fixed time)
 2. Create a sample representing the frequency of species in a quadrat (hint: assuming a few species will be very common and many species will be very rare)
+
+Additional challenges:
+- Plot these distributions.
+- Repeat your sampling while the distribution while varying key parameters
+- Plot summary statistics of your sampling with with various parameters
 
 <div class="centered">
 
@@ -515,9 +549,14 @@ Solutions
 
 
 1.
-```{r}
+```{r }
 dolphins <- rpois(n = 1000,
                   lambda = 3)
+```
+
+***
+
+```{r }
 hist(dolphins)
 ```
 
@@ -526,7 +565,7 @@ Solutions
 ========================================================
 
 2.
-```{r}
+```{r }
 species <- rlnorm(n = 1000,
                   mean = 25,
                   sd=1)
@@ -571,7 +610,7 @@ Simulating an experiment
 design setup "manually"
 
 Example 2 factors, 2 levels, 3 replicates, full factorial
-```{r}
+```{r }
 one_replicate <- data.frame(factorA=factor(rep(c("FacA_Level1",
                                      "FacA_Level2"),
                                      3)),
@@ -590,7 +629,7 @@ Alternatives:
 Need for scaling of predictors
 ========================================================
 
-```{r}
+```{r }
 require(cowplot)
 one_replicate$response <- with(one_replicate,
                         as.numeric(factorA)*
@@ -614,7 +653,7 @@ How to scale predictors
 ========================================================
 
 function to create scaled numeric predictors from all factors
-```{r}
+```{r }
 num_scale_fact <- function(data_frame){
   ind <- sapply(data_frame, is.factor)
   data_frame[paste0("num_",names(data_frame[ind]))] <- 
@@ -628,7 +667,7 @@ num_scale_fact <- function(data_frame){
 Results of scaling predictors
 ========================================================
 
-```{r}
+```{r }
 one_replicate <- num_scale_fact(one_replicate)
 
 one_replicate$response <- with(one_replicate,
@@ -638,7 +677,7 @@ one_replicate$response <- with(one_replicate,
 
 ***
 
-```{r echo=FALSE}
+```{r  echo=FALSE}
 p <- qplot(data = one_replicate,
            x=factorA,
            y=response,
@@ -652,7 +691,7 @@ print(p)
 Adding error and replication
 ========================================================
 
-```{r}
+```{r }
 experiment1 <- NULL
 for(i in LETTERS[1:3]){
   one_replicate$replicate <- factor(i)
@@ -695,7 +734,7 @@ Solution
 ========================================================
 
 1.
-```{r}
+```{r }
 require(ggplot2)
 p <- qplot(data=experiment1,
            x=factorA,
@@ -709,10 +748,15 @@ Solution
 ========================================================
 
 2.
-```{r}
+```{r }
 fit <- aov(data = experiment1,
            response~factorA*factorB)
 summary(fit)
+```
+
+***
+
+```{r echo=F}
 par(mfrow=c(2,2))
 plot(fit)
 par(mfrow=c(1,1))
@@ -723,7 +767,7 @@ Accelerate the process
 
 Experimental setup using tools
 
-```{r}
+```{r }
 require(AlgDesign)
 experiment2 <- gen.factorial(levels=c(3,2,2),
                              nVars=3,
@@ -731,6 +775,7 @@ experiment2 <- gen.factorial(levels=c(3,2,2),
                              factors="all")
 
 ```
+
 [Experimental design task view](https://cran.r-project.org/web/views/ExperimentalDesign.html)
 
 
@@ -740,7 +785,7 @@ Replicate the whole experiments (trials)
 - create an expanded simulated data set and analyse each trial
 
 - create the experimental design
-```{r}
+```{r }
 experiment_design <- gen.factorial(levels=c(3,2,2),
                             nVars=3,
                             varNames=c("A","B","C"),
@@ -753,7 +798,7 @@ Replicate the whole experiments design
 ===
 
 - add replication and trial (replication of the experiment)
-```{r}
+```{r }
 trial_rep <- expand.grid(trial=as.factor(1:1000),
                          rep=as.factor(1:5))
 
@@ -767,14 +812,14 @@ https://stackoverflow.com/questions/11693599/alternative-to-expand-grid-for-data
 Add a response
 ===
 
-```{r}
+```{r }
 rep_exp1$response <- with(rep_exp1, num_A+num_B+num_B*num_C+num_A*num_B*num_C+rnorm(nrow(rep_exp1), sd=2))
 ```
 
 Plotting the replicated experiment
 ===
 
-```{r}
+```{r }
 p <- qplot(data=rep_exp1,
            x=A,
            y=response,
@@ -784,13 +829,18 @@ p <- qplot(data=rep_exp1,
   geom_line(aes(group=paste(trial, rep, B)),
              alpha=0.02)+
   facet_grid(. ~ C, labeller = label_both)
+```
+
+***
+
+```{r }
 print(p)
 ```
 
 Analysing the trials
 ===
 
-```{r}
+```{r }
 require(broom)
 require(dplyr)
 fit_results <- rep_exp1 %>%
@@ -806,13 +856,15 @@ p <- qplot(data = fit_results,
 
 ***
 
-```{r echo=F}
+```{r  echo=F}
 print(p)
 ```
 
 
+Analysing the trials
+===
 
-```{r}
+```{r }
 require(sjstats)
 fit_results <- rep_exp1 %>%
   group_by(trial) %>%
@@ -821,7 +873,7 @@ fit_results <- rep_exp1 %>%
 
 ***
 
-```{r echo=FALSE}
+```{r  echo=FALSE}
 require(ggplot2)
 p <- qplot(data = fit_results,
            y = omegasq,
@@ -832,7 +884,7 @@ print(p)
 
 
 
-Replicate the whole experiments (alternatives)
+Alternative methods to replicate the whole experiments
 ===
 
 - fit model to single experiment and use `simulate`
@@ -840,7 +892,7 @@ Replicate the whole experiments (alternatives)
     simulate.lm : normal distribution with same MSE as original model
 
 creat a base experiment
-```{r}
+```{r }
 exp_d_rep <- do.call("rbind", replicate(3, experiment_design, simplify = FALSE))
 exp_resp <- exp_d_rep
 exp_resp$response <- with(exp_resp,
@@ -850,7 +902,7 @@ exp_resp$response <- with(exp_resp,
 Replicate with `simulate`
 ===
 
-```{r}
+```{r }
 fit <- lm(response~A*B*C, data=exp_resp)
 exp_sim <- cbind(exp_d_rep,simulate(fit,nsim = 10))
 
@@ -869,7 +921,7 @@ Setup trials that vary in design
 ===
 
 Lets get super meta: setup an experimental design for your sensitivity analysis experiment of your experiment
-```{r}
+```{r }
 sens_setup <- expand.grid(trial=as.factor(1:100),
                          replication=c(3:10),
                          error=c(0.1,0.5,1,5,10))
@@ -879,7 +931,7 @@ Calcualte the response for different design values
 ===
 
 Setup a function
-```{r}
+```{r }
 f_rep_error <- function(rep,error){
   rep_exp <- expand.grid.df(data.frame(rep=rep, replicate=1:rep),experiment_design)
   rep_exp$response <- with(rep_exp, num_A+num_B+num_B*num_C+num_A*num_B*num_C+rnorm(nrow(rep_exp), sd=error))
@@ -887,17 +939,18 @@ f_rep_error <- function(rep,error){
 }
 ```
 Apply the function to individual trials
-```{r}
+```{r }
 trial_rep_error <- sens_setup %>% group_by(trial, replication, error) %>%
   do(with(.,f_rep_error(replication, error)))
 ```
 
 
 Sensitivity analysis of experimental design
-or experimenting with experimental design
 ===
 
-```{r}
+## or experimenting with experimental design
+
+```{r }
 require(broom)
 require(dplyr)
 fit_results <- trial_rep_error %>%
@@ -905,7 +958,9 @@ fit_results <- trial_rep_error %>%
   do(tidy(aov(response~A*B*C, data=.)))
 ```
 
-```{r echo= FALSE}
+***
+
+```{r  echo= FALSE}
 require(ggplot2)
 p <- qplot(data = fit_results,
            x=as.factor(error),
@@ -933,7 +988,7 @@ see ```R vignette("AlgDesign")```
 - optBlock {AlgDesign}
 - optFederov {AlgDesign}
 
-Challenge
+Challenges
 ========================================================
 
 - instead of `gen.factorial` use one of the optimize incomplete factorial designs using the same setup `rep_exp1`
@@ -942,6 +997,7 @@ Challenge
 - does the use of non-normaly distributed error (eg. poisson) affect your interpreation using `aov`?
 - any difference with numeric rather than factor predictors?
 - what are the effect of a non-linear interaction with one of your predictors?
+- what are the effect of heteroscedasticity (eg. correlation of variance with one of the predictors)?
 
 <div class="centered">
 
@@ -1000,5 +1056,9 @@ Dojo 3
 
 Redesign the experiment from your favourite recent publication
 - Use the same number of experimental units and try to improve on the design
-- Where the authors lucky? Insert problems into the study (eg. other distribution, loss of a replicate).  Do you consistently get the same results.
+- Were the authors lucky? Insert problems into the study (eg. other distribution, loss of a replicate).  Do you consistently get the same results.
 
+
+
+Additional material
+===
