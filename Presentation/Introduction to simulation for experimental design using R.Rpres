@@ -1,3 +1,16 @@
+<style>
+.reveal h1, .reveal h2, .reveal h3 {
+  word-wrap: normal;
+  -moz-hyphens: none;
+}
+</style>
+
+<style>
+.small-code pre code {
+  font-size: 1em;
+}
+</style>
+
 Introduction to simulation for experimental design using R
 ===
 author: Etienne Low-Décarie
@@ -5,7 +18,7 @@ date: 12 July 2018
 width: 1280
 height: 800
 
-Gettint to know each other
+Getting to know each other
 ===
 left: 30%
 
@@ -27,6 +40,7 @@ Workshop
 - Post its
 - Challenges
     - Don't look at solutions when given...
+-All material on github.com/low-decarie
 
 Schedule
 ===========
@@ -65,10 +79,14 @@ Schedule
 
 > To consult the statistician after an experiment is finished is often merely to ask him to conduct a post mortem examination. He can perhaps say what the experiment died of.
 
+<br>
+<br>
 
 Sir Ronald Fisher, Presidential Address to the First Indian Statistical Congress, 1938. Sankhya 4, 14-17.
 
-<img src=https://serverdensity-wpengine.netdna-ssl.com/wp-content/uploads/2016/01/Write-a-postmortem.png width="500" style="float:right">
+***
+
+<img src=https://serverdensity-wpengine.netdna-ssl.com/wp-content/uploads/2016/01/Write-a-postmortem.png width="500">
 
 
 
