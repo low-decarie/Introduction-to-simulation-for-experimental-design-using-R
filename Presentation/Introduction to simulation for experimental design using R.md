@@ -731,7 +731,7 @@ for(i in LETTERS[1:3]){
   one_replicate$replicate <- factor(i)
   one_replicate$response <- with(one_replicate,
                         num_factorA*
-                          num_factorB+rnorm(n = 1, sd=2))
+                          num_factorB+rnorm(n = nrow(one_replicate), sd=2))
   experiment1 <- rbind(experiment1,one_replicate)
 }
 ```
