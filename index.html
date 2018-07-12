@@ -773,7 +773,7 @@ hljs.initHighlightingOnLoad();
    
   
 
-
+<style>.reveal h1, .reveal h2, .reveal h3 {  word-wrap: normal;  -moz-hyphens: none;}</style><style>.small-code pre code {  font-size: 1em;}</style>
 
 
 
@@ -792,7 +792,7 @@ hljs.initHighlightingOnLoad();
 
 </section>
 <section data-transition="linear" data-transition-speed="default">
-<h3>Gettint to know each other</h3>
+<h3>Getting to know each other</h3>
 <div class="column column1 slideContent" style="width: 28%;" >
 <p><div align="center">
 You?
@@ -816,7 +816,8 @@ You?
 <li>Challenges
 
 <ul>
-<li>Don&#39;t look at solutions when given&hellip;</li>
+<li>Don&#39;t look at solutions when given&hellip;
+-All material on github.com/low-decarie</li>
 </ul></li>
 </ul>
 
@@ -884,14 +885,23 @@ You?
 </section>
 <section data-transition="linear" data-transition-speed="default">
 
-<div class="slideContent noTitle" >
+<div class="column column1 slideContent noTitle" >
 <blockquote>
 <p>To consult the statistician after an experiment is finished is often merely to ask him to conduct a post mortem examination. He can perhaps say what the experiment died of.</p>
 </blockquote>
 
+<p><br>
+<br></p>
+
 <p>Sir Ronald Fisher, Presidential Address to the First Indian Statistical Congress, 1938. Sankhya 4, 14-17.</p>
 
-<p><img src=https://serverdensity-wpengine.netdna-ssl.com/wp-content/uploads/2016/01/Write-a-postmortem.png width="500" style="float:right"></p>
+
+</div>
+
+<div class="column column2 slideContent noTitle" >
+
+
+<p><img src=https://serverdensity-wpengine.netdna-ssl.com/wp-content/uploads/2016/01/Write-a-postmortem.png width="500"></p>
 
 </div>
 
@@ -1755,7 +1765,7 @@ for(i in LETTERS[1:3]){
   one_replicate$replicate &lt;- factor(i)
   one_replicate$response &lt;- with(one_replicate,
                         num_factorA*
-                          num_factorB+rnorm(n = 1, sd=2))
+                          num_factorB+rnorm(n = nrow(one_replicate), sd=2))
   experiment1 &lt;- rbind(experiment1,one_replicate)
 }
 </code></pre>
